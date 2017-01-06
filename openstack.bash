@@ -29,6 +29,9 @@ function testone() {
         echo Using $(basename $env)
 
         $env/bin/python -m testtools.run "$@"
+        if [ $? != 0 ]; then
+            return $?
+        fi
     done
 }
 
