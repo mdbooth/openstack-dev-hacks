@@ -44,3 +44,19 @@ function testone27() {
 function testone34() {
     .tox/py34/bin/python -m testtools.run "$@"
 }
+
+function _tox_staged(){
+    tests=""
+    for test in $(git diff --cached --name-only | grep tests); do 
+        t=$(echo $test | sed 's/\//\./g' | sed 's/\.py//g')
+        tests+=" ${t}"; 
+    done
+    tox -e py27 $tests
+}
+
+function _tox_last(){                                                         
+    touched_tests=$(git diff-tree --no-commit-id --name-only -r HEAD | grep tests)
+    tests=""
+    for test in $touched_tests; do t=$(echo $test | sed 's/\//\./g' | sed 's/\.py//g'); tests+=" ${t}"; done
+    tox -e py27 $tests
+}
