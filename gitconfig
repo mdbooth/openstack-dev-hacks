@@ -1,0 +1,12 @@
+[alias]
+   # edit previous commit
+   e = !vim -p $(git diff-tree --no-commit-id --name-only -r HEAD)
+   # edit unmerged files during rebase
+   eu = !vim -p $(git diff --name-only --diff-filter=U)
+   ch = rev-parse --abbrev-ref HEAD
+   s = status
+   a = !git add \"$@\"
+   aa = add --all
+   ca = commit --amend
+   mt = mergetool
+   cp = !git cherry-pick -x $1
