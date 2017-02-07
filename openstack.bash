@@ -60,3 +60,16 @@ function _tox_last(){
     for test in $touched_tests; do t=$(echo $test | sed 's/\//\./g' | sed 's/\.py//g'); tests+=" ${t}"; done
     tox -e py27 $tests
 }
+
+# Lovingly stolen from:
+#   http://stackoverflow.com/questions/1527049/join-elements-of-an-array
+function _join_by { local IFS="$1"; shift; echo "$*"; }
+
+# Fetch a number of log files from a ci run using curl
+# Usage: ci_log_fetch http://logs.openstack.org/.../f829785/logs/ n-api n-vol
+function ci_log_fetch() {
+    url=$1
+    shift
+
+    curl --compressed "$url/screen-{"$(_join_by , $*)"}.txt.gz" -o "#1.log"
+}
