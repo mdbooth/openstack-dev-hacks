@@ -37,17 +37,18 @@ if [ -z "$component" -o -z "$sub" ]; then
 fi
 
 service="$component-$sub"
+systemd_service="openstack-$service"
 
 function restart_service() {
-    sudo openstack-service start "$service"
+    sudo systemctl start "$systemd_service"
 }
 
-status=$(openstack-service is-active "$service")
+status=$(systemctl is-active "$systemd_service")
 if [ "$status" == "active" ]; then
-    sudo openstack-service stop "$service"
+    sudo systemctl stop "$systemd_service"
     trap restart_service EXIT
 elif [ "$status" != "inactive" ]; then
-    echo "$service is not a valid openstack service"
+    echo "$systemd_service is not a valid systemd unit"
     exit 1
 fi
 
